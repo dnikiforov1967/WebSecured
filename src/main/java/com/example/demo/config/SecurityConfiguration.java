@@ -7,6 +7,8 @@ package com.example.demo.config;
 
 import com.example.demo.security.service.DaoUserDetailsService;
 import com.example.demo.service.UserApiServiceInterface;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,8 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+	private static final Logger LOG = Logger.getLogger(SecurityConfiguration.class.getName());
 
 	@Autowired
 	UserApiServiceInterface userApiService;
@@ -48,11 +52,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 				.maximumSessions(3)
 				.expiredUrl("/static/expired.html");
+		LOG.log(Level.WARNING, "Security HTTP changed");
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(getDaoAuthenticationProvider());
+		LOG.log(Level.WARNING, "Security AuthenticationManagerBuilder changed");
 	}
 
 }

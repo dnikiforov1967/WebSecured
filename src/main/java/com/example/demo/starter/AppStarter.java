@@ -37,7 +37,7 @@ public class AppStarter {
 		try {
 			final AppUser[] users = CommonHelper.transformJsonToObject("defaultUserSet.json", AppUser[].class);
 			Arrays.stream(users).forEach(userServiceInterface::create);
-			LOG.log(Level.INFO, "Initial user set created");
+			LOG.log(Level.WARNING, "Initial user set created");
 		} catch (IOException ex) {
 			throw new RuntimeException(ex);
 		}
