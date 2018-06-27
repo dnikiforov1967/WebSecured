@@ -35,7 +35,6 @@ public class DaoUserDetailsService implements UserDetailsService {
 		UserDetails userDetails = User
 				.withUsername(user.getUsername())
 				.password(user.getPassword())
-				.roles("USER")
 				.build();
 		return userDetails;
 	}
