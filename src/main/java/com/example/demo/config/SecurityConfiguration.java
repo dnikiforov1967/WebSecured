@@ -5,13 +5,14 @@
  */
 package com.example.demo.config;
 
-import com.example.demo.security.service.DaoUserDetailsService;
+import com.example.demo.security.handler.DaoUserDetailsService;
 import com.example.demo.service.UserApiServiceInterface;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  *
@@ -34,16 +37,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserApiServiceInterface userApiService;
-	
+
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
-	
+
 	@Autowired
 	private AuthenticationEntryPoint authenticationEntryPoint;
+
+	@Autowired
+	private LogoutSuccessHandler logoutSuccessHandler;
 
 	@Bean
 	public HttpSessionEventPublisher httpSessionEventPublisher() {
 		return new HttpSessionEventPublisher();
+	}
+
+	@Bean
+	@Override
+	protected AuthenticationManager authenticationManager() throws Exception {
+		return super.authenticationManager();
 	}
 
 	private DaoAuthenticationProvider getDaoAuthenticationProvider() {
@@ -55,26 +67,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
+		http
+				.csrf()
+				//Disable CSRF support
+				.disable()
+				//adjust the matchers for request	
 				.authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/favicon.ico").permitAll()
 				.antMatchers("/index.html").permitAll()
-				.antMatchers("/rest/login").permitAll()
+				.antMatchers("/security/login").permitAll()
 				.anyRequest().authenticated()
 				.and()
+				//Adjust the logout behaviour
 				.logout()
 				.permitAll()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/security/login", "DELETE"))
+				.logoutSuccessHandler(logoutSuccessHandler)
 				.and()
 				.getConfigurer(ExceptionHandlingConfigurer.class)
+				//Exception handlers
 				.accessDeniedHandler(accessDeniedHandler)
 				.authenticationEntryPoint(authenticationEntryPoint);
-
-		//			.sessionManagement()
-		//			.invalidSessionUrl("/static/invalid.html")
-		//			.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-		//			.maximumSessions(3)
-		//			.expiredUrl("/static/expired.html");
 		LOG.log(Level.WARNING, "Security HTTP changed");
 	}
 
