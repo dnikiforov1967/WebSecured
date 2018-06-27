@@ -44,8 +44,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.sessionManagement()
+				.invalidSessionUrl("/static/invalid.html")
 				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-				.maximumSessions(3);
+				.maximumSessions(3)
+				.expiredUrl("/static/expired.html");
 	}
 
 	@Override
