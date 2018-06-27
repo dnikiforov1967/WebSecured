@@ -7,6 +7,7 @@ package com.example.demo.starter;
 
 import com.example.demo.jpa.model.AppUser;
 import com.example.demo.service.UserApiServiceInterface;
+import com.example.demo.util.CommonHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,12 +34,8 @@ public class AppStarter {
 
 	@PostConstruct
 	private void init() {
-		ObjectMapper mapper = new ObjectMapper();
-		final InputStream inputStream = Thread.currentThread()
-				.getContextClassLoader()
-				.getResourceAsStream("defaultUserSet.json");
 		try {
-			final AppUser[] users = mapper.readValue(inputStream, AppUser[].class);
+			final AppUser[] users = CommonHelper.transformJsonToObject("defaultUserSet.json", AppUser[].class);
 			Arrays.stream(users).forEach(userServiceInterface::create);
 			LOG.log(Level.INFO, "Initial user set created");
 		} catch (IOException ex) {
