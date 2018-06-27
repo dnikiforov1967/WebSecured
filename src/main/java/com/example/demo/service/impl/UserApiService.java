@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
  *
  * @author dnikiforov
  */
-@Component
+@Component("jpaUserApiService")
 public class UserApiService implements UserApiServiceInterface {
 
 	@Autowired
