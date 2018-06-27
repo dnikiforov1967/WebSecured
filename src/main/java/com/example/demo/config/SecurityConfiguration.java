@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private static final Logger LOG = Logger.getLogger(SecurityConfiguration.class.getName());
 
 	@Autowired
-	UserApiServiceInterface userApiService;
+	private UserApiServiceInterface userApiService;
 
 	@Bean
 	public HttpSessionEventPublisher httpSessionEventPublisher() {
