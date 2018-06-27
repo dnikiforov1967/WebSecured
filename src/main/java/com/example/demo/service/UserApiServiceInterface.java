@@ -6,6 +6,7 @@
 package com.example.demo.service;
 
 import com.example.demo.jpa.model.AppUser;
+import java.util.List;
 
 /**
  *
@@ -18,6 +19,9 @@ public interface UserApiServiceInterface {
 	void delete(AppUser user);
 
 	AppUser find(AppUser user);
+
 	AppUser findByName(String userName);
+
+	List<AppUser> getAllUsers();
 
 }

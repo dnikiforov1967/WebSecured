@@ -8,6 +8,7 @@ package com.example.demo.service.impl;
 import com.example.demo.jpa.api.UserJpaRepository;
 import com.example.demo.jpa.model.AppUser;
 import com.example.demo.service.UserApiServiceInterface;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,12 @@ public class UserApiService implements UserApiServiceInterface {
 	public AppUser findByName(String userName) {
 		final Optional<AppUser> found = userJpaRepository.findById(userName);
 		return found.orElse(null);
+	}
+
+	@Override
+	public List<AppUser> getAllUsers() {
+		final List<AppUser> findAll = userJpaRepository.findAll();
+		return findAll;
 	}
 
 }
