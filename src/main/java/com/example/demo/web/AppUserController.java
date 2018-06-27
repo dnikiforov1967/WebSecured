@@ -11,11 +11,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  *
@@ -34,4 +36,11 @@ public class AppUserController {
 		return userApiService.getAllUsers();
 	}
 
+	@RequestMapping(value = "/", method = POST
+			,produces = {MediaType.APPLICATION_JSON_VALUE}
+			,consumes = {MediaType.APPLICATION_JSON_VALUE})
+	public AppUser create(@RequestBody AppUser appUser) {
+		return userApiService.create(appUser);
+	}	
+	
 }

@@ -31,5 +31,12 @@ public class AppUserControllerTests {
 		Collections.sort(fromFile);
 		assertEquals(all, fromFile);
 	}
+	
+	@Test
+	public void testCreateUser() throws IOException {
+		AppUser appUser = new AppUser("newUser","newPassword");
+		final AppUser created = appUserController.create(appUser);
+		assertEquals(appUser, created);
+	}	
 
 }
