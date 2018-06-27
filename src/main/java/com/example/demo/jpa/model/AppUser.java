@@ -5,10 +5,12 @@
  */
 package com.example.demo.jpa.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -16,10 +18,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "users")
-public class AppUser {
+public class AppUser implements Comparable<AppUser>, Serializable {
 
 	@Id
 	private String username;
+	@NotNull
 	private String password;
 
 	public AppUser() {
@@ -69,6 +72,11 @@ public class AppUser {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public int compareTo(AppUser t) {
+		return this.username.compareTo(t.username);
 	}
 
 }
