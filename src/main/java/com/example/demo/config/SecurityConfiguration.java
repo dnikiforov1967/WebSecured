@@ -17,7 +17,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 /**
@@ -32,6 +34,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserApiServiceInterface userApiService;
+	
+	@Autowired
+	private AccessDeniedHandler accessDeniedHandler;
+	
+	@Autowired
+	private AuthenticationEntryPoint authenticationEntryPoint;
 
 	@Bean
 	public HttpSessionEventPublisher httpSessionEventPublisher() {
@@ -47,11 +55,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.sessionManagement()
-				.invalidSessionUrl("/static/invalid.html")
-				.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-				.maximumSessions(3)
-				.expiredUrl("/static/expired.html");
+		http.csrf().disable()
+				.authorizeRequests()
+				.antMatchers("/").permitAll()
+				.antMatchers("/favicon.ico").permitAll()
+				.antMatchers("/index.html").permitAll()
+				.antMatchers("/rest/login").permitAll()
+				.anyRequest().authenticated()
+				.and()
+				.logout()
+				.permitAll()
+				.and()
+				.getConfigurer(ExceptionHandlingConfigurer.class)
+				.accessDeniedHandler(accessDeniedHandler)
+				.authenticationEntryPoint(authenticationEntryPoint);
+
+		//			.sessionManagement()
+		//			.invalidSessionUrl("/static/invalid.html")
+		//			.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+		//			.maximumSessions(3)
+		//			.expiredUrl("/static/expired.html");
 		LOG.log(Level.WARNING, "Security HTTP changed");
 	}
 
