@@ -7,8 +7,12 @@ package com.example.demo.jpa.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -24,6 +28,17 @@ public class AppUser implements Comparable<AppUser>, Serializable {
 	private String username;
 	@NotNull
 	private String password;
+
+	@OneToMany(mappedBy = "key.appUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	private Set<AppUserRole> appUserRoles;
+
+	public Set<AppUserRole> getAppUserRoles() {
+		return appUserRoles;
+	}
+
+	public void setAppUserRoles(Set<AppUserRole> appUserRoles) {
+		this.appUserRoles = appUserRoles;
+	}
 
 	public AppUser() {
 	}
