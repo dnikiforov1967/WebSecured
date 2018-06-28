@@ -20,6 +20,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -34,39 +36,46 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+	
 	private static final Logger LOG = Logger.getLogger(SecurityConfiguration.class.getName());
-
+	
 	@Autowired
 	private UserApiServiceInterface userApiService;
-
+	
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
-
+	
 	@Autowired
 	private AuthenticationEntryPoint authenticationEntryPoint;
-
+	
 	@Autowired
 	private LogoutSuccessHandler logoutSuccessHandler;
-
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder;
+	}
+	
 	@Bean
 	public HttpSessionEventPublisher httpSessionEventPublisher() {
 		return new HttpSessionEventPublisher();
 	}
-
+	
 	@Bean
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
-
+	
 	private DaoAuthenticationProvider getDaoAuthenticationProvider() {
 		DaoAuthenticationProvider daoAuthenticationProvider
 				= new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(new DaoUserDetailsService(userApiService));
+		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 		return daoAuthenticationProvider;
 	}
-
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -93,11 +102,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.authenticationEntryPoint(authenticationEntryPoint);
 		LOG.log(Level.WARNING, "Security HTTP changed");
 	}
-
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(getDaoAuthenticationProvider());
 		LOG.log(Level.WARNING, "Security AuthenticationManagerBuilder changed");
 	}
-
+	
 }
