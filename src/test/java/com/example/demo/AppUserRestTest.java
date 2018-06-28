@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -42,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(AppUserController.class)
-@WithMockUser(username = "user1", password = "1111", roles = {"USER"})
+@WithMockUser(username = "user1", password = "1111", roles = {"ADMIN"})
 public class AppUserRestTest {
 
 	private static AppUser user;
@@ -51,6 +52,9 @@ public class AppUserRestTest {
 	@MockBean(name = "jpaUserApiService")
 	private UserApiServiceInterface userApiService;
 
+	@MockBean
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	private MockMvc mockMvc;
 

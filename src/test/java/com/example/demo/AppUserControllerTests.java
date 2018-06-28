@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@WithMockUser(username = "user1", password = "1111", roles = {"USER"})
+@WithMockUser(username = "user1", password = "1111", roles = {"ADMIN"})
 public class AppUserControllerTests {
 
 	@Autowired
@@ -38,8 +38,9 @@ public class AppUserControllerTests {
 	@Test
 	public void testCreateUser() throws IOException {
 		AppUser appUser = new AppUser("newUser", "newPassword");
-		final AppUserResource created = appUserController.create(appUser);
-		assertEquals(new AppUserResource(appUser), created);
+		final AppUserResource appUserResource = new AppUserResource(appUser);
+		final AppUserResource created = appUserController.create(appUserResource);
+		assertEquals(appUserResource, created);
 	}
 
 }
