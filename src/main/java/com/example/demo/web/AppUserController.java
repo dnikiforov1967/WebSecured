@@ -7,9 +7,12 @@ package com.example.demo.web;
 
 import com.example.demo.jpa.model.AppUser;
 import com.example.demo.service.UserApiServiceInterface;
+import com.example.demo.web.resource.AppUserResource;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -38,16 +41,21 @@ public class AppUserController {
 	
 	@RequestMapping(value = "/getAll", method = GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	@Secured({"ROLE_USER"})
-	public List<AppUser> getAll() {
+	public List<AppUserResource> getAll() {
 		LOG.log(Level.WARNING, "getAll() method invocation");
-		return userApiService.getAllUsers();
+		final List<AppUser> allUsers = userApiService.getAllUsers();
+		final List<AppUserResource> collect = allUsers.stream().map(AppUserResource::new).collect(Collectors.toList());
+		return collect;
 	}
 
 	@RequestMapping(value = "/", method = POST
 			,produces = {MediaType.APPLICATION_JSON_VALUE}
 			,consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public AppUser create(@RequestBody AppUser appUser) {
-		return userApiService.create(appUser);
+	public AppUserResource create(@RequestBody AppUser appUser) {
+		LOG.log(Level.WARNING, "create() method invocation");
+		final AppUser create = userApiService.create(appUser);
+		LOG.log(Level.WARNING, "create() method invocation completed, "+create.toString());
+		return new AppUserResource(create);
 	}	
 	
 }
