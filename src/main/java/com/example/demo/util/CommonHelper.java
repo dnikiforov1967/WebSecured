@@ -7,6 +7,7 @@ package com.example.demo.util;
 
 import com.example.demo.jpa.model.AppUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,5 +33,11 @@ public final class CommonHelper {
 				.getResourceAsStream(fileName);
 		return transformJsonToObject(inputStream, clazz);
 	}
+	
+	public static <T> String transformObjectToJson(T obj) throws IOException {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
+		mapper.writeValue(byteArrayOutputStream, obj);
+		return new String(byteArrayOutputStream.toByteArray(), "UTF-8");
+	} 
 
 }
