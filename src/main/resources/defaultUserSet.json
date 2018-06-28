@@ -1,7 +1,7 @@
 [
 	{
-		"username": "user1",
-		"password": "{noop}1111",
-		"roles": ["ROLE_USER"]
+		"username": "admin",
+		"password": "$2a$10$vg0xNDKYvsWZaWxkh9Y5AOO8KkvN7l6yT240hiA56F0Eo/XYWUZb2",
+		"roles": ["ROLE_ADMIN"]
 	}
 ]	
