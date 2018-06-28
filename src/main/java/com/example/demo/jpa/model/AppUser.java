@@ -10,8 +10,8 @@ import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -29,7 +29,7 @@ public class AppUser implements Comparable<AppUser>, Serializable {
 	@NotNull
 	private String password;
 
-	@OneToMany(mappedBy = "key.appUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "key.appUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
 	private Set<AppUserRole> appUserRoles;
 
 	public Set<AppUserRole> getAppUserRoles() {
@@ -92,6 +92,11 @@ public class AppUser implements Comparable<AppUser>, Serializable {
 	@Override
 	public int compareTo(AppUser t) {
 		return this.username.compareTo(t.username);
+	}
+
+	@Override
+	public String toString() {
+		return "AppUser{" + "username=" + username + ", password=" + password + '}';
 	}
 
 }
