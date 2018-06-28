@@ -2,6 +2,6 @@
 	{
 		"username": "user1",
 		"password": "{noop}1111",
-		"appUserRoles": [{"appUser":{"username": "user1","password": "{noop}1111"},"appRole":"ROLE_USER"}]
+		"roles": ["ROLE_USER"]
 	}
 ]	

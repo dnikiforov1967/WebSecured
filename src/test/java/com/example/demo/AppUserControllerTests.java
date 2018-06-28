@@ -28,8 +28,8 @@ public class AppUserControllerTests {
 	@Test
 	public void testGetAllUsers() throws IOException {
 		final List<AppUserResource> all = appUserController.getAll();
-		final AppUser[] array = CommonHelper.transformJsonToObject("defaultUserSet.json", AppUser[].class);
-		final List<AppUserResource> fromFile = Arrays.stream(array).map(AppUserResource::new).collect(Collectors.toList());
+		final AppUserResource[] resources = CommonHelper.transformJsonToObject("defaultUserSet.json", AppUserResource[].class);
+		final List<AppUserResource> fromFile = Arrays.stream(resources).collect(Collectors.toList());
 		Collections.sort(all);
 		Collections.sort(fromFile);
 		assertEquals(all, fromFile);
