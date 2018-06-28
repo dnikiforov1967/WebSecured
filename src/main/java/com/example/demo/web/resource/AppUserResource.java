@@ -8,6 +8,7 @@ package com.example.demo.web.resource;
 import com.example.demo.jpa.model.AppRole;
 import com.example.demo.jpa.model.AppUser;
 import com.example.demo.jpa.model.AppUserRole;
+import com.example.demo.jpa.model.AppUserRoleKey;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -19,6 +20,15 @@ import java.util.stream.Collectors;
  * @author dnikiforov
  */
 public class AppUserResource implements Comparable<AppUserResource>, Serializable {
+
+	public static AppUser CONVERT2USER(AppUserResource resource) {
+		final AppUser appUser = new AppUser(resource.getUsername(), resource.getPassword());
+		final Set<AppUserRole> appRoles = resource.roles.stream().map((t) -> {
+			return new AppUserRole(new AppUserRoleKey(appUser, t));
+		}).collect(Collectors.toSet());
+		appUser.setAppUserRoles(appRoles);
+		return appUser;
+	}
 
 	private String username;
 	private String password;
