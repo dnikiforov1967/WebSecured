@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,30 +33,36 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping("/users")
 public class AppUserController {
-
+	
 	private static final Logger LOG = Logger.getLogger(AppUserController.class.getName());
 	
 	@Autowired
 	@Qualifier("jpaUserApiService")
 	private UserApiServiceInterface userApiService;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@RequestMapping(value = "/getAll", method = GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-	@Secured({"ROLE_USER"})
+	@Secured({"ROLE_ADMIN"})
 	public List<AppUserResource> getAll() {
 		LOG.log(Level.WARNING, "getAll() method invocation");
 		final List<AppUser> allUsers = userApiService.getAllUsers();
 		final List<AppUserResource> collect = allUsers.stream().map(AppUserResource::new).collect(Collectors.toList());
 		return collect;
 	}
-
-	@RequestMapping(value = "/", method = POST
-			,produces = {MediaType.APPLICATION_JSON_VALUE}
-			,consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public AppUserResource create(@RequestBody AppUser appUser) {
+	
+	@RequestMapping(value = "", method = POST,
+			produces = {MediaType.APPLICATION_JSON_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE})
+	@Secured({"ROLE_ADMIN"})
+	public AppUserResource create(@RequestBody AppUserResource appUserResource) {
 		LOG.log(Level.WARNING, "create() method invocation");
+		final AppUser appUser = AppUserResource.CONVERT2USER(appUserResource);
+		appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
 		final AppUser create = userApiService.create(appUser);
-		LOG.log(Level.WARNING, "create() method invocation completed, "+create.toString());
+		LOG.log(Level.WARNING, "create() method invocation completed, " + create.toString());
 		return new AppUserResource(create);
-	}	
+	}
 	
 }
