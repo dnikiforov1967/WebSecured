@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -27,6 +28,7 @@ public class AppUser implements Comparable<AppUser>, Serializable {
 	@Id
 	private String username;
 	@NotNull
+	@Column(length = 64)
 	private String password;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "key.appUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
