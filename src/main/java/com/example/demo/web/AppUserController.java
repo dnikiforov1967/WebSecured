@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -33,16 +32,16 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping("/users")
 public class AppUserController {
-	
+
 	private static final Logger LOG = Logger.getLogger(AppUserController.class.getName());
-	
+
 	@Autowired
 	@Qualifier("jpaUserApiService")
 	private UserApiServiceInterface userApiService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@RequestMapping(value = "/getAll", method = GET, produces = {MediaType.APPLICATION_JSON_VALUE})
 	@Secured({"ROLE_ADMIN"})
 	public List<AppUserResource> getAll() {
@@ -51,7 +50,7 @@ public class AppUserController {
 		final List<AppUserResource> collect = allUsers.stream().map(AppUserResource::new).collect(Collectors.toList());
 		return collect;
 	}
-	
+
 	@RequestMapping(value = "", method = POST,
 			produces = {MediaType.APPLICATION_JSON_VALUE},
 			consumes = {MediaType.APPLICATION_JSON_VALUE})
@@ -64,5 +63,5 @@ public class AppUserController {
 		LOG.log(Level.WARNING, "create() method invocation completed, " + create.toString());
 		return new AppUserResource(create);
 	}
-	
+
 }
