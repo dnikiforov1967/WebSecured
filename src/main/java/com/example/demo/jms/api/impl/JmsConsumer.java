@@ -27,6 +27,7 @@ public class JmsConsumer implements JmsApi {
     @JmsListener(destination = "testQueue", containerFactory = "custimizedFactory")
     @Transactional
     public AppUserResource receive(AppUserResource resource) {
+        resource.setPassword("72817");
         return resource;
     }
     
