@@ -25,7 +25,8 @@ import org.springframework.jms.support.destination.DynamicDestinationResolver;
 public class JmsCustomConfiguration {
 
     private ConnectionFactory connectionFactory() {
-        ConnectionFactory factory = new ActiveMQXAConnectionFactory("vm://localhost");
+        ActiveMQXAConnectionFactory factory = new ActiveMQXAConnectionFactory("vm://localhost");
+        factory.setTrustAllPackages(true);
         return factory;
     }
 
@@ -34,6 +35,7 @@ public class JmsCustomConfiguration {
         template.setConnectionFactory(connectionFactory());
         template.setExplicitQosEnabled(true);
         template.setDeliveryPersistent(false);
+        template.setReceiveTimeout(1000);
         template.setTimeToLive(60000);
         template.setSessionAcknowledgeMode(Session.SESSION_TRANSACTED);
         return template;
