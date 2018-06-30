@@ -24,3 +24,8 @@
 /nbdist/
 /.nb-gradle/
 /nbproject/
+
+#Others
+activemq-data/
+tmlog29.log
+transaction-logs/
