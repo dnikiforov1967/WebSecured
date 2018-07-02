@@ -77,10 +77,16 @@ public class AppUserServiceTest {
 		userApiService.clear();
 		appUser = userApiService.findByName(appUser.getUsername());
 		assertEquals(1,appUser.getAppUserRoles().size());
+		userApiService.clear();
+		appUser = new AppUser("dima","dima2");
+		appUserRoles.clear();
 		appUserRoles.add(new AppUserRole(new AppUserRoleKey(appUser, AppRole.ROLE_ADMIN)));
-		appUser.setPassword("dima2");
+		appUserRoles.add(new AppUserRole(new AppUserRoleKey(appUser, AppRole.ROLE_USER)));
 		appUser.setAppUserRoles(appUserRoles);
 		appUser = userApiService.update(appUser);
+		userApiService.clear();
+		appUser = userApiService.findByName(appUser.getUsername());
+		assertEquals(2,appUser.getAppUserRoles().size());
 	}
 
 }

@@ -37,7 +37,10 @@ public class UserApiService implements UserApiServiceInterface {
 
 	@Override
 	public AppUser update(AppUser user) {
-		final AppUser merged = entityManager.merge(user);
+		final AppUser found = find(user);
+		found.setPassword(user.getPassword());
+		found.setAppUserRoles(user.getAppUserRoles());
+		final AppUser merged = entityManager.merge(found);
 		entityManager.flush();
 		return merged;
 	}
