@@ -31,18 +31,21 @@ public class UserApiService implements UserApiServiceInterface {
 	@Override
 	public AppUser create(AppUser user) {
 		entityManager.persist(user);
+		entityManager.flush();
 		return user;
 	}
 
 	@Override
 	public AppUser update(AppUser user) {
 		final AppUser merged = entityManager.merge(user);
+		entityManager.flush();
 		return merged;
 	}
 
 	@Override
 	public void delete(AppUser user) {
 		entityManager.remove(user);
+		entityManager.flush();
 	}
 
 	@Override
@@ -62,6 +65,11 @@ public class UserApiService implements UserApiServiceInterface {
 		final TypedQuery<AppUser> query = entityManager.createQuery("select c from AppUser c", AppUser.class);
 		final List<AppUser> findAll = query.getResultList();
 		return findAll;
+	}
+
+	@Override
+	public void clear() {
+		entityManager.clear();
 	}
 
 }
