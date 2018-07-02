@@ -34,7 +34,7 @@ public class JmsConsumer implements JmsApi {
 
     @Override
     @JmsListener(destination = "testQueue", containerFactory = "custimizedFactory")
-    @Transactional
+    //@Transactional
     public JmsResult receive(AppUserResource resource) {
 		try {
 			final AppUser user = AppUserResource.CONVERT2USER(resource);

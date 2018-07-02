@@ -37,7 +37,7 @@ public class JmsCustomConfiguration {
         template.setDeliveryPersistent(false);
         template.setReceiveTimeout(1000);
         template.setTimeToLive(60000);
-        template.setSessionAcknowledgeMode(Session.SESSION_TRANSACTED);
+        template.setSessionAcknowledgeMode(Session.AUTO_ACKNOWLEDGE);
         return template;
     }
 

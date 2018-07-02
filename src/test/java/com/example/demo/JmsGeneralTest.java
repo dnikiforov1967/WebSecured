@@ -61,7 +61,7 @@ public class JmsGeneralTest {
 		appUserResource.setPassword("testPassword");
 		JmsResult result = jmsApi.send(appUserResource);
 		assertEquals("testPassword", result.getResource().getPassword());
-		//result = jmsApi.send(appUserResource);
-		//assertNull(result.getResource());
+		result = jmsApi.send(appUserResource);
+		assertNull(result.getResource());
 	}
 }
