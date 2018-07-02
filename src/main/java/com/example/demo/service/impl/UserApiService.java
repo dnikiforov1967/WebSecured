@@ -5,12 +5,14 @@
  */
 package com.example.demo.service.impl;
 
-import com.example.demo.jpa.api.UserJpaRepository;
 import com.example.demo.jpa.model.AppUser;
 import com.example.demo.service.UserApiServiceInterface;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,36 +20,41 @@ import org.springframework.stereotype.Component;
  * @author dnikiforov
  */
 @Component("jpaUserApiService")
+@Transactional
 public class UserApiService implements UserApiServiceInterface {
 
-	@Autowired
-	private UserJpaRepository userJpaRepository;
+	private static final Logger LOG = Logger.getLogger(UserApiService.class.getName());
+
+	@PersistenceContext(unitName = "globalPU")
+	private EntityManager entityManager;
 
 	@Override
 	public AppUser create(AppUser user) {
-		return userJpaRepository.save(user);
+		entityManager.persist(user);
+		return user;
 	}
 
 	@Override
 	public void delete(AppUser user) {
-		userJpaRepository.delete(user);
+		entityManager.remove(user);
 	}
 
 	@Override
 	public AppUser find(AppUser user) {
-		final Optional<AppUser> found = userJpaRepository.findById(user.getUsername());
-		return found.orElse(null);
+		final AppUser find = entityManager.find(AppUser.class, user.getUsername());
+		return find;
 	}
 
 	@Override
 	public AppUser findByName(String userName) {
-		final Optional<AppUser> found = userJpaRepository.findById(userName);
-		return found.orElse(null);
+		final AppUser found = entityManager.find(AppUser.class, userName);
+		return found;
 	}
 
 	@Override
 	public List<AppUser> getAllUsers() {
-		final List<AppUser> findAll = userJpaRepository.findAll();
+		final TypedQuery<AppUser> query = entityManager.createQuery("select c from AppUser c", AppUser.class);
+		final List<AppUser> findAll = query.getResultList();
 		return findAll;
 	}
 

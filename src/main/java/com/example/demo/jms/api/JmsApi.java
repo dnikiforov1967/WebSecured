@@ -5,6 +5,7 @@
  */
 package com.example.demo.jms.api;
 
+import com.example.demo.jms.model.JmsResult;
 import com.example.demo.web.resource.AppUserResource;
 
 /**
@@ -13,8 +14,8 @@ import com.example.demo.web.resource.AppUserResource;
  */
 public interface JmsApi {
     
-    AppUserResource send(AppUserResource resource);
+    JmsResult send(AppUserResource resource);
     
-    AppUserResource receive(AppUserResource resource);
+    JmsResult receive(AppUserResource resource);
     
 }
