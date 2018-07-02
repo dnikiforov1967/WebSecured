@@ -15,6 +15,8 @@ import java.util.List;
 public interface UserApiServiceInterface {
 
 	AppUser create(AppUser user);
+	
+	AppUser update(AppUser user);	
 
 	void delete(AppUser user);
 

@@ -35,6 +35,12 @@ public class UserApiService implements UserApiServiceInterface {
 	}
 
 	@Override
+	public AppUser update(AppUser user) {
+		final AppUser merged = entityManager.merge(user);
+		return merged;
+	}
+
+	@Override
 	public void delete(AppUser user) {
 		entityManager.remove(user);
 	}
