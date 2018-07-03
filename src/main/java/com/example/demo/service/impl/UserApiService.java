@@ -5,14 +5,20 @@
  */
 package com.example.demo.service.impl;
 
+import com.example.demo.jpa.api.UserAppJpaInterface;
 import com.example.demo.jpa.model.AppUser;
 import com.example.demo.service.UserApiServiceInterface;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,54 +31,55 @@ public class UserApiService implements UserApiServiceInterface {
 
 	private static final Logger LOG = Logger.getLogger(UserApiService.class.getName());
 
-	@PersistenceContext(unitName = "globalPU")
-	private EntityManager entityManager;
+	@Autowired
+	private UserAppJpaInterface userAppJpa;
+
+	//@PersistenceContext(unitName = "globalPU")
+	//private EntityManager entityManager;
 
 	@Override
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public AppUser create(AppUser user) {
-		entityManager.persist(user);
-		entityManager.flush();
+		if (!userAppJpa.existsById(user.getUsername())) {
+			userAppJpa.saveAndFlush(user);
+		} else {
+			throw new EntityExistsException("User " + user.getUsername() + " already exists");
+		}
 		return user;
 	}
 
 	@Override
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public AppUser update(AppUser user) {
 		final AppUser found = find(user);
 		found.setPassword(user.getPassword());
 		found.setAppUserRoles(user.getAppUserRoles());
-		final AppUser merged = entityManager.merge(found);
-		entityManager.flush();
+		final AppUser merged = userAppJpa.saveAndFlush(found);
 		return merged;
 	}
 
 	@Override
 	public void delete(AppUser user) {
-		entityManager.remove(user);
-		entityManager.flush();
+		userAppJpa.delete(user);
+		userAppJpa.flush();
 	}
 
 	@Override
 	public AppUser find(AppUser user) {
-		final AppUser find = entityManager.find(AppUser.class, user.getUsername());
-		return find;
+		final Optional<AppUser> find = userAppJpa.findById(user.getUsername());
+		return find.orElse(null);
 	}
 
 	@Override
 	public AppUser findByName(String userName) {
-		final AppUser found = entityManager.find(AppUser.class, userName);
-		return found;
+		final Optional<AppUser> found = userAppJpa.findById(userName);
+		return found.orElse(null);
 	}
 
 	@Override
 	public List<AppUser> getAllUsers() {
-		final TypedQuery<AppUser> query = entityManager.createQuery("select c from AppUser c", AppUser.class);
-		final List<AppUser> findAll = query.getResultList();
+		final List<AppUser> findAll = userAppJpa.findAll();
 		return findAll;
-	}
-
-	@Override
-	public void clear() {
-		entityManager.clear();
 	}
 
 }

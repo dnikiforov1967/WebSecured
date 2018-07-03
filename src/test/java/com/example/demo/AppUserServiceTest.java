@@ -5,7 +5,6 @@
  */
 package com.example.demo;
 
-import com.example.demo.config.DatabaseConfiguration;
 import com.example.demo.jpa.model.AppRole;
 import com.example.demo.jpa.model.AppUser;
 import com.example.demo.jpa.model.AppUserRole;
@@ -74,17 +73,14 @@ public class AppUserServiceTest {
 		appUserRoles.add(new AppUserRole(new AppUserRoleKey(appUser, AppRole.ROLE_USER)));
 		appUser.setAppUserRoles(appUserRoles);
 		userApiService.create(appUser);
-		userApiService.clear();
 		appUser = userApiService.findByName(appUser.getUsername());
 		assertEquals(1,appUser.getAppUserRoles().size());
-		userApiService.clear();
 		appUser = new AppUser("dima","dima2");
 		appUserRoles.clear();
 		appUserRoles.add(new AppUserRole(new AppUserRoleKey(appUser, AppRole.ROLE_ADMIN)));
 		appUserRoles.add(new AppUserRole(new AppUserRoleKey(appUser, AppRole.ROLE_USER)));
 		appUser.setAppUserRoles(appUserRoles);
 		appUser = userApiService.update(appUser);
-		userApiService.clear();
 		appUser = userApiService.findByName(appUser.getUsername());
 		assertEquals(2,appUser.getAppUserRoles().size());
 	}

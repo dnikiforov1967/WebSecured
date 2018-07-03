@@ -25,7 +25,5 @@ public interface UserApiServiceInterface {
 	AppUser findByName(String userName);
 
 	List<AppUser> getAllUsers();
-	
-	void clear();
 
 }
