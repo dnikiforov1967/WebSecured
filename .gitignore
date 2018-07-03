@@ -27,5 +27,5 @@
 
 #Others
 activemq-data/
-tmlog29.log
+tmlog*.log
 transaction-logs/
