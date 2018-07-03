@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.LockModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -36,7 +37,6 @@ public class UserApiService implements UserApiServiceInterface {
 
 	//@PersistenceContext(unitName = "globalPU")
 	//private EntityManager entityManager;
-
 	@Override
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public AppUser create(AppUser user) {
@@ -52,6 +52,9 @@ public class UserApiService implements UserApiServiceInterface {
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	public AppUser update(AppUser user) {
 		final AppUser found = find(user);
+		if (found == null) {
+			throw new EntityNotFoundException("User " + user.getUsername() + " not found");
+		}
 		found.setPassword(user.getPassword());
 		found.setAppUserRoles(user.getAppUserRoles());
 		final AppUser merged = userAppJpa.saveAndFlush(found);

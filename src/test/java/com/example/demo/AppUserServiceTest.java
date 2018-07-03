@@ -67,7 +67,7 @@ public class AppUserServiceTest {
 	}
 
 	@Test()
-	public void testCreateAndMergeWithRoles() {
+	public void testCreateAndUpdateWithRoles() {
 		AppUser appUser = new AppUser("dima","dima1");
 		Set<AppUserRole> appUserRoles = new HashSet<>();
 		appUserRoles.add(new AppUserRole(new AppUserRoleKey(appUser, AppRole.ROLE_USER)));
