@@ -6,6 +6,7 @@
 package com.example.demo.jpa.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -15,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -33,8 +35,11 @@ public class AppUser implements Comparable<AppUser>, Serializable {
 	@Column(length = 64)
 	private String password;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {
+		CascadeType.REFRESH, CascadeType.MERGE
+	})
 	@JoinTable(
+			name = "userToRole",
 			joinColumns = {
 				@JoinColumn(referencedColumnName = "username", name = "appUserId")
 			},
@@ -42,13 +47,13 @@ public class AppUser implements Comparable<AppUser>, Serializable {
 				@JoinColumn(referencedColumnName = "id", name = "appRoleId")
 			}
 	)
-	private Set<AppRole> appRoles;
+	private Set<AppRole> appRoles = new HashSet<>();
 
 	public Set<AppRole> getAppRoles() {
 		return appRoles;
 	}
 
-	public void setAppRoles(Set<AppRole> appUserRoles) {
+	public void setAppRoles(Set<AppRole> appRoles) {
 		this.appRoles = appRoles;
 	}
 
