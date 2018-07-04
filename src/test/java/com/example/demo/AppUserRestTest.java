@@ -19,7 +19,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -44,7 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(AppUserController.class)
 @WithMockUser(username = "user1", password = "1111", roles = {"ADMIN"})
-@Ignore
 public class AppUserRestTest {
 
 	private static AppUser user;
