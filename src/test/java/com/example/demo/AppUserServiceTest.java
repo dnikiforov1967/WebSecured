@@ -57,11 +57,17 @@ public class AppUserServiceTest {
 	public void tearDown() {
 	}
 
-	// TODO add test methods here.
-	// The methods must be annotated with annotation @Test. For example:
-	//
-	@Test(expected = EntityExistsException.class)
+	@Test
 	public void testCreate() {
+		final AppUser appUser = new AppUser("dima","dima1");
+		Set<AppUserRole> set = new HashSet<>();
+		set.add(new AppUserRole(new AppUserRoleKey(appUser, AppRole.ROLE_USER)));
+		appUser.setAppUserRoles(set);
+		userApiService.create(appUser);
+	}
+	
+	@Test(expected = EntityExistsException.class)
+	public void testCreateDouble() {
 		userApiService.create(new AppUser("dima","dima1"));
 		userApiService.create(new AppUser("dima","dima2"));
 	}
