@@ -56,7 +56,7 @@ public class UserApiService implements UserApiServiceInterface {
 			throw new EntityNotFoundException("User " + user.getUsername() + " not found");
 		}
 		found.setPassword(user.getPassword());
-		found.setAppUserRoles(user.getAppUserRoles());
+		found.setAppRoles(user.getAppRoles());
 		final AppUser merged = userAppJpa.saveAndFlush(found);
 		return merged;
 	}

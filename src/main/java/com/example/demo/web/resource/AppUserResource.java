@@ -6,9 +6,8 @@
 package com.example.demo.web.resource;
 
 import com.example.demo.jpa.model.AppRole;
+import com.example.demo.jpa.model.RoleEnum;
 import com.example.demo.jpa.model.AppUser;
-import com.example.demo.jpa.model.AppUserRole;
-import com.example.demo.jpa.model.AppUserRoleKey;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -23,16 +22,16 @@ public class AppUserResource implements Comparable<AppUserResource>, Serializabl
 
 	public static AppUser CONVERT2USER(AppUserResource resource) {
 		final AppUser appUser = new AppUser(resource.getUsername(), resource.getPassword());
-		final Set<AppUserRole> appRoles = resource.roles.stream().map((t) -> {
-			return new AppUserRole(new AppUserRoleKey(appUser, t));
+		final Set<AppRole> appRoles = resource.roles.stream().map((t) -> {
+			return new AppRole(t);
 		}).collect(Collectors.toSet());
-		appUser.setAppUserRoles(appRoles);
+		appUser.setAppRoles(appRoles);
 		return appUser;
 	}
 
 	private String username;
 	private String password;
-	private Set<AppRole> roles = new HashSet<>();
+	private Set<RoleEnum> roles = new HashSet<>();
 
 	public AppUserResource() {
 	}
@@ -40,12 +39,9 @@ public class AppUserResource implements Comparable<AppUserResource>, Serializabl
 	public AppUserResource(AppUser appUser) {
 		this.username = appUser.getUsername();
 		this.password = appUser.getPassword();
-		final Set<AppUserRole> appUserRoles = appUser.getAppUserRoles();
-		if (appUserRoles != null) {
-			this.roles = appUserRoles
-					.stream()
-					.map(AppUserRole::getAppRole)
-					.collect(Collectors.toSet());
+		final Set<AppRole> appRoles = appUser.getAppRoles();
+		if (appRoles != null) {
+			this.roles = appRoles.stream().map(AppRole::getId).collect(Collectors.toSet());
 		}
 	}
 
@@ -65,11 +61,11 @@ public class AppUserResource implements Comparable<AppUserResource>, Serializabl
 		this.password = password;
 	}
 
-	public Set<AppRole> getRoles() {
+	public Set<RoleEnum> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<AppRole> roles) {
+	public void setRoles(Set<RoleEnum> roles) {
 		this.roles = roles;
 	}
 

@@ -35,8 +35,8 @@ public class DaoUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		LOG.log(Level.WARNING, "Identification of " + userName + " is calling");
 		final AppUser user = userApiServiceInterface.findByName(userName);
-		final Set<SimpleGrantedAuthority> authorities = user.getAppUserRoles().stream().map((t) -> {
-			return new SimpleGrantedAuthority(t.getAppRole().name());
+		final Set<SimpleGrantedAuthority> authorities = user.getAppRoles().stream().map((t) -> {
+			return new SimpleGrantedAuthority(t.getId().name());
 		}).collect(Collectors.toSet());
 		UserDetails userDetails = User
 				.withUsername(user.getUsername())

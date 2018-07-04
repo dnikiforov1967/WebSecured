@@ -5,9 +5,10 @@
  */
 package com.example.demo.starter;
 
+import com.example.demo.jpa.model.AppRole;
 import com.example.demo.jpa.model.AppUser;
-import com.example.demo.jpa.model.AppUserRole;
-import com.example.demo.jpa.model.AppUserRoleKey;
+import com.example.demo.jpa.model.RoleEnum;
+import com.example.demo.service.RoleServiceInterface;
 import com.example.demo.service.UserApiServiceInterface;
 import com.example.demo.util.CommonHelper;
 import com.example.demo.web.resource.AppUserResource;
@@ -36,17 +37,20 @@ public class AppStarter {
 	@Autowired
 	private UserApiServiceInterface userServiceInterface;
 
+	@Autowired
+	private RoleServiceInterface roleServiceInterface;
+
 	@PostConstruct
 	private void init() {
 		try {
+			final AppRole[] roles = CommonHelper.transformJsonToObject("defaultRoleSet.json", AppRole[].class);
+			Arrays.stream(roles).forEach(roleServiceInterface::create);
+
 			final AppUserResource[] userResources = CommonHelper.transformJsonToObject("defaultUserSet.json", AppUserResource[].class);
 			final Stream<AppUser> users = Arrays.stream(userResources).map((t) -> {
 				final AppUser appUser = new AppUser(t.getUsername(), t.getPassword());
-				final Stream<AppUserRole> rolesStream = t.getRoles().stream().map((x) -> {
-					return new AppUserRole(new AppUserRoleKey(appUser, x));
-				});
-				final Set<AppUserRole> roles = rolesStream.collect(Collectors.toSet());
-				appUser.setAppUserRoles(roles);
+				final Set<AppRole> collect = t.getRoles().stream().map(AppRole::new).collect(Collectors.toSet());
+				appUser.setAppRoles(collect);
 				return appUser;
 			});
 			users.forEach(userServiceInterface::create);

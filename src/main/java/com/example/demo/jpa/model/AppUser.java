@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -31,15 +33,23 @@ public class AppUser implements Comparable<AppUser>, Serializable {
 	@Column(length = 64)
 	private String password;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "key.appUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-	private Set<AppUserRole> appUserRoles;
+	@OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@JoinTable(
+			joinColumns = {
+				@JoinColumn(referencedColumnName = "username", name = "appUserId")
+			},
+			inverseJoinColumns = {
+				@JoinColumn(referencedColumnName = "id", name = "appRoleId")
+			}
+	)
+	private Set<AppRole> appRoles;
 
-	public Set<AppUserRole> getAppUserRoles() {
-		return appUserRoles;
+	public Set<AppRole> getAppRoles() {
+		return appRoles;
 	}
 
-	public void setAppUserRoles(Set<AppUserRole> appUserRoles) {
-		this.appUserRoles = appUserRoles;
+	public void setAppRoles(Set<AppRole> appUserRoles) {
+		this.appRoles = appRoles;
 	}
 
 	public AppUser() {
