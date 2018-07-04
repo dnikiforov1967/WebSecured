@@ -7,10 +7,13 @@ package com.example.demo.jpa.model;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -24,7 +27,18 @@ public class AppRole implements Serializable {
 	@Id
 	@Enumerated(EnumType.STRING)
 	private RoleEnum id;
+	
+	@ManyToMany(mappedBy = "appRoles", cascade=CascadeType.REFRESH)
+    private Set<AppUser> users;	
 
+	public Set<AppUser> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<AppUser> users) {
+		this.users = users;
+	}
+	
 	public AppRole() {
 		
 	}
