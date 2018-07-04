@@ -63,7 +63,8 @@ public class AppUserServiceTest {
 		Set<AppRole> set = new HashSet<>();
 		set.add(new AppRole(RoleEnum.ROLE_USER));
 		appUser.setAppRoles(set);
-		userApiService.create(appUser);
+		final AppUser created = userApiService.create(appUser);
+		assertEquals(1,created.getAppRoles().size());
 	}
 
 	@Test(expected = EntityExistsException.class)
