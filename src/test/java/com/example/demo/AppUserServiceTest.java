@@ -19,7 +19,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,7 +31,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-@Ignore
 public class AppUserServiceTest {
 
 	@Autowired
@@ -60,9 +58,7 @@ public class AppUserServiceTest {
 	@Test
 	public void testCreate() {
 		final AppUser appUser = new AppUser("dima", "dima1");
-		Set<AppRole> set = new HashSet<>();
-		set.add(new AppRole(RoleEnum.ROLE_USER));
-		appUser.setAppRoles(set);
+		appUser.getAppRoles().add(new AppRole(RoleEnum.ROLE_USER));
 		final AppUser created = userApiService.create(appUser);
 		assertEquals(1,created.getAppRoles().size());
 	}
@@ -76,17 +72,15 @@ public class AppUserServiceTest {
 	@Test()
 	public void testCreateAndUpdateWithRoles() {
 		AppUser appUser = new AppUser("dima", "dima1");
-		Set<AppRole> appRoles = new HashSet<>();
+		Set<AppRole> appRoles = appUser.getAppRoles();
 		appRoles.add(new AppRole(RoleEnum.ROLE_USER));
-		appUser.setAppRoles(appRoles);
 		userApiService.create(appUser);
 		appUser = userApiService.findByName(appUser.getUsername());
 		assertEquals(1, appUser.getAppRoles().size());
 		appUser = new AppUser("dima", "dima2");
-		appRoles.clear();
+		appRoles = appUser.getAppRoles();
 		appRoles.add(new AppRole(RoleEnum.ROLE_ADMIN));
 		appRoles.add(new AppRole(RoleEnum.ROLE_USER));
-		appUser.setAppRoles(appRoles);
 		appUser = userApiService.update(appUser);
 		appUser = userApiService.findByName(appUser.getUsername());
 		assertEquals(2, appUser.getAppRoles().size());
