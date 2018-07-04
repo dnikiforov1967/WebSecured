@@ -78,9 +78,10 @@ public class AppUserServiceTest {
 		appUser = userApiService.findByName(appUser.getUsername());
 		assertEquals(1, appUser.getAppRoles().size());
 		appUser = new AppUser("dima", "dima2");
-		appRoles = appUser.getAppRoles();
+		appRoles = new HashSet<>();
 		appRoles.add(new AppRole(RoleEnum.ROLE_ADMIN));
 		appRoles.add(new AppRole(RoleEnum.ROLE_USER));
+		appUser.setAppRoles(appRoles);
 		appUser = userApiService.update(appUser);
 		appUser = userApiService.findByName(appUser.getUsername());
 		assertEquals(2, appUser.getAppRoles().size());
