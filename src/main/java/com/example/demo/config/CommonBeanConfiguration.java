@@ -6,9 +6,13 @@
 package com.example.demo.config;
 
 import com.example.demo.beans.LightningInterface;
+import com.example.demo.beans.ThunderInterface;
 import com.example.demo.beans.TicketInterface;
 import com.example.demo.beans.impl.Lightning;
+import com.example.demo.beans.impl.Thunder;
 import com.example.demo.beans.impl.Ticket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.aop.TargetSource;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.ProxyFactoryBean;
@@ -54,7 +58,6 @@ public class CommonBeanConfiguration {
 	}
 
 	@Bean
-	@Scope(value = "prototype")
 	public LightningInterface lightningInterface(@Autowired @Qualifier("lightningFactoryBean") ProxyFactoryBean proxyFactoryBean) {
 		return (LightningInterface) proxyFactoryBean.getObject();
 	}
