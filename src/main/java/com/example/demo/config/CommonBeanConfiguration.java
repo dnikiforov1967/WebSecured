@@ -11,14 +11,12 @@ import com.example.demo.beans.TicketInterface;
 import com.example.demo.beans.impl.Lightning;
 import com.example.demo.beans.impl.Thunder;
 import com.example.demo.beans.impl.Ticket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.springframework.aop.TargetSource;
-import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.target.CommonsPool2TargetSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -66,6 +64,18 @@ public class CommonBeanConfiguration {
 	@Scope(value = "prototype", proxyMode = ScopedProxyMode.INTERFACES)
 	public TicketInterface ticketInterface() {
 		return new Ticket();
+	}
+
+	@Bean
+	@Scope(value = "singleton")
+	public ThunderInterface thunderInterface() {
+		Enhancer enhancer = new Enhancer();
+		enhancer.setSuperclass(Thunder.class);
+		enhancer.setCallback((MethodInterceptor) (obj, method, args, proxy) -> {
+			final Thunder thunder = new Thunder();
+			return proxy.invoke(thunder, args);
+		});
+		return (ThunderInterface) enhancer.create();
 	}
 
 }
