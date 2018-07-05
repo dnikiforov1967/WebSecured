@@ -5,7 +5,9 @@
  */
 package com.example.demo;
 
+import com.example.demo.aop.Gun;
 import com.example.demo.beans.LightningInterface;
+import com.example.demo.beans.ThunderInterface;
 import com.example.demo.beans.TicketInterface;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -42,8 +44,14 @@ public class AopAndProxyTest implements Callable<UUID> {
 	private LightningInterface lightningInterface;
 
 	@Autowired
+	private ThunderInterface thunderInterface;
+
+	@Autowired
 	@Qualifier("lightningTargetSource")
 	private CommonsPool2TargetSource pool;
+	
+	@Autowired
+	private Gun gun;
 
 	public AopAndProxyTest() {
 	}
@@ -90,8 +98,27 @@ public class AopAndProxyTest implements Callable<UUID> {
 		assertNotEquals(idA, idB);
 		assertEquals(3, pool.getIdleCount());
 		executor.shutdown();
+		System.out.println("Type of object: " + lightningInterface.getClass().getName());
 	}
 
+	@Test
+	public void thunderTest() {
+		final UUID idA = thunderInterface.boom();
+		System.out.println("I have called Thunder::boom, reference is " + idA.toString());
+		final UUID idB = thunderInterface.boom();
+		System.out.println("I have called Thunder::boom, reference is " + idB.toString());
+		assertNotEquals(idA, idB);
+	}
+
+	@Test
+	public void gunTest() {
+		int loads = gun.getLoads();
+		assertEquals(0, loads);
+		gun.shot();
+		loads = gun.getLoads();
+		assertEquals(5, loads);
+	}	
+	
 	@Override
 	public UUID call() throws Exception {
 		return lightningInterface.flush();
