@@ -5,6 +5,7 @@
  */
 package com.example.demo.config;
 
+import com.example.demo.aop.SimpleAdvice;
 import com.example.demo.beans.LightningInterface;
 import com.example.demo.beans.ThunderInterface;
 import com.example.demo.beans.TicketInterface;
@@ -19,6 +20,7 @@ import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
@@ -27,8 +29,12 @@ import org.springframework.context.annotation.ScopedProxyMode;
  * @author dnikiforov
  */
 @Configuration
+@EnableAspectJAutoProxy
 public class CommonBeanConfiguration {
 
+	@Autowired
+	private SimpleAdvice simpleAdvice;
+	
 	@Bean(name = "pooledLightning")
 	@Scope(value = "prototype")
 	public LightningInterface getLightning() {
@@ -52,6 +58,7 @@ public class CommonBeanConfiguration {
 	public ProxyFactoryBean lightningFactoryBean(@Autowired @Qualifier("lightningTargetSource") CommonsPool2TargetSource targetSource) {
 		ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
 		proxyFactoryBean.setTargetSource(targetSource);
+		proxyFactoryBean.addAdvice(simpleAdvice);
 		return proxyFactoryBean;
 	}
 
