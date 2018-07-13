@@ -28,10 +28,10 @@ public class MainStarter {
 				.child(WebSecuredApplication.class)
 				.web(WebApplicationType.SERVLET)
 				.run(args);
-		final InsectInterface bean = run.getBean(InsectInterface.class);
+		final InsectInterface bean = run.getBean("mockito",InsectInterface.class);
 		System.out.println(bean.name());
 		final ApplicationContext parent = run.getParent();
-		final InsectInterface bean1 = parent.getBean(InsectInterface.class);
+		final InsectInterface bean1 = parent.getBean("mockito",InsectInterface.class);
 		System.out.println(bean1.name());
 	}
 	
