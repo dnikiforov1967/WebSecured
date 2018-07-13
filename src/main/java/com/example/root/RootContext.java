@@ -5,6 +5,8 @@
  */
 package com.example.root;
 
+import com.example.common.InsectInterface;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -16,5 +18,14 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/root.properties") 
 public class RootContext {
 
-
+	@Bean("mockito")
+	public InsectInterface insectInterface() {
+		return new InsectInterface() {
+			@Override
+			public String name() {
+				return "Moskito 1";
+			}
+		};
+	}
+	
 }
