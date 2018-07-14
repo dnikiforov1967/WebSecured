@@ -12,6 +12,7 @@ import com.example.child.service.UserApiServiceInterface;
 import com.example.child.util.CommonHelper;
 import com.example.child.web.AppUserController;
 import com.example.child.web.resource.AppUserResource;
+import com.example.root.RootContext;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -41,6 +44,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author dnikiforov
  */
 @RunWith(SpringRunner.class)
+@ContextHierarchy({
+        @ContextConfiguration(name = "root", classes = RootContext.class),
+        @ContextConfiguration(name = "child", classes = WebSecuredApplication.class)
+})
 @WebMvcTest(AppUserController.class)
 @WithMockUser(username = "user1", password = "1111", roles = {"ADMIN"})
 public class AppUserRestTest {

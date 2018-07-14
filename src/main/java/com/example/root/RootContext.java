@@ -23,7 +23,7 @@ public class RootContext {
 		return new InsectInterface() {
 			@Override
 			public String name() {
-				return "Moskito 1";
+				return "Mockito 1";
 			}
 		};
 	}

@@ -8,6 +8,7 @@ package com.example.child;
 import com.example.child.jms.api.JmsApi;
 import com.example.child.jms.model.JmsResult;
 import com.example.child.web.resource.AppUserResource;
+import com.example.root.RootContext;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -18,6 +19,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -25,6 +28,10 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author dima
  */
 @RunWith(SpringRunner.class)
+@ContextHierarchy({
+        @ContextConfiguration(name = "root", classes = RootContext.class),
+        @ContextConfiguration(name = "child", classes = WebSecuredApplication.class)
+})
 @SpringBootTest
 public class JmsGeneralTest {
 

@@ -11,6 +11,7 @@ import com.example.child.jpa.model.AppRole;
 import com.example.child.jpa.model.AppUser;
 import static com.example.child.jpa.model.RoleEnum.ROLE_ADMIN;
 import static com.example.child.jpa.model.RoleEnum.ROLE_USER;
+import com.example.root.RootContext;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,6 +25,8 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -31,6 +34,10 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @author dnikiforov
  */
 @RunWith(SpringRunner.class)
+@ContextHierarchy({
+        @ContextConfiguration(name = "root", classes = RootContext.class),
+        @ContextConfiguration(name = "child", classes = WebSecuredApplication.class)
+})
 @SpringBootTest
 @Transactional
 public class JpaTest {

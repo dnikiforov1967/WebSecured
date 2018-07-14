@@ -4,6 +4,7 @@ import com.example.child.jpa.model.AppUser;
 import com.example.child.util.CommonHelper;
 import com.example.child.web.AppUserController;
 import com.example.child.web.resource.AppUserResource;
+import com.example.root.RootContext;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,9 +16,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
+@ContextHierarchy({
+        @ContextConfiguration(name = "root", classes = RootContext.class),
+        @ContextConfiguration(name = "child", classes = WebSecuredApplication.class)
+})
 @SpringBootTest
 @WithMockUser(username = "user1", password = "1111", roles = {"ADMIN"})
 public class AppUserControllerTests {
