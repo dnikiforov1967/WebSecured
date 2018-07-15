@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.example.child;
+package com.example.test;
 
+import com.example.child.WebSecuredApplication;
 import com.example.child.jpa.api.RoleJpaInterface;
 import com.example.child.jpa.api.UserAppJpaInterface;
 import com.example.child.jpa.model.AppRole;
@@ -22,6 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -3,18 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.example.child;
+package com.example.test;
 
+import com.example.child.WebSecuredApplication;
 import com.example.child.jms.api.JmsApi;
 import com.example.child.jms.model.JmsResult;
 import com.example.child.web.resource.AppUserResource;
 import com.example.root.RootContext;
+import javax.transaction.Transactional;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -33,6 +36,8 @@ import org.springframework.test.context.junit4.SpringRunner;
         @ContextConfiguration(name = "child", classes = WebSecuredApplication.class)
 })
 @SpringBootTest
+@Transactional
+//@Ignore
 public class JmsGeneralTest {
 
 	@Autowired

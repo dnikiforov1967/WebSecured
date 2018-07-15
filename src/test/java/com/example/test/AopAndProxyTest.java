@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.example.child;
+package com.example.test;
 
+import com.example.child.WebSecuredApplication;
 import com.example.child.aop.Gun;
 import com.example.child.beans.LightningInterface;
 import com.example.child.beans.MetallInterface;

@@ -1,5 +1,6 @@
-package com.example.child;
+package com.example.test;
 
+import com.example.child.WebSecuredApplication;
 import com.example.child.jpa.model.AppUser;
 import com.example.child.util.CommonHelper;
 import com.example.child.web.AppUserController;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 })
 @SpringBootTest
 @WithMockUser(username = "user1", password = "1111", roles = {"ADMIN"})
+//@Ignore
 public class AppUserControllerTests {
 
 	@Autowired
