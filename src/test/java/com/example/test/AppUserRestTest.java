@@ -11,13 +11,11 @@ import com.example.child.jpa.model.RoleEnum;
 import com.example.child.jpa.model.AppUser;
 import com.example.child.service.UserApiServiceInterface;
 import com.example.child.util.CommonHelper;
-import com.example.child.web.AppUserController;
 import com.example.child.web.resource.AppUserResource;
 import com.example.root.RootContext;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,7 +26,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -54,10 +51,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         @ContextConfiguration(name = "child", classes = WebSecuredApplication.class)
 })
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc()
 @WithMockUser(username = "user1", password = "1111", roles = {"ADMIN"})
 @Ignore
-@Transactional
 public class AppUserRestTest {
 
 	private static AppUser user;
